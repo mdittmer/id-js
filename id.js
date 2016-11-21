@@ -25,10 +25,13 @@ module.exports = function(opts) {
   var key = opts.key || '+UID';
 
   for (var i = 0; i < installedIds.length; i++) {
-    if (installedIds[i] === key)
-      throw new Error('Attempt to re-install object id "' + key + '"');
+    if (installedIds[i].key === key) {
+      if (!installedIds[i].data) throw new Error('Id install re-entry');
+      return installedIds[i].data;
+    }
   }
-  installedIds.push(key);
+  var installedId = {key: key};
+  installedIds.push(installedId);
 
   var key__ = key + '__';
   var start = typeof opts.start === 'number' ? opts.start : 10000;
@@ -105,11 +108,13 @@ module.exports = function(opts) {
     return getPairedId(v);
   }
 
-  return {
+  installedId.data = {
     key: key,
     key__: key__,
     isValidId: isValidId,
     nextId: nextId,
     getId: getId,
   };
+
+  return installedId.data;
 };
