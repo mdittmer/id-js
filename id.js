@@ -16,11 +16,20 @@
  */
 'use strict';
 
+var installedIds = [];
+
 // Provide a unique id for every object.
 module.exports = function(opts) {
   opts = opts || {};
 
   var key = opts.key || '+UID';
+
+  for (var i = 0; i < installedIds.length; i++) {
+    if (installedIds[i] === key)
+      throw new Error('Attempt to re-install object id "' + key + '"');
+  }
+  installedIds.push(key);
+
   var key__ = key + '__';
   var start = typeof opts.start === 'number' ? opts.start : 10000;
   var isValidId = opts.isValidId || function(id) {
