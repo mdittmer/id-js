@@ -67,22 +67,17 @@ module.exports = function(opts) {
     get: function() {
       if ( ! this.hasOwnProperty(key__) ) {
         try {
+          var existingLocalId = this[key__];
           Object.defineProperty(this, key__, {
             value: nextId(),
             enumerable: false,
           });
+          if (existingLocalId === this[key__]) return getPairedId(this);
         } catch (e) {
           return getPairedId(this);
         }
       }
-
-      // Catch corner case: own property of this[key__] was not actually
-      // created!
-      if ( this.__proto__ && this.__proto__[key] === this[key__] ) {
-        return getPairedId(this);
-      } else {
-        return this[key__];
-      }
+      return this[key__];
     },
     enumerable: false,
   };
