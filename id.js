@@ -72,7 +72,7 @@ module.exports = function(opts) {
             value: nextId(),
             enumerable: false,
           });
-          if (existingLocalId === this[key__]) return getPairedId(this);
+          if ( existingLocalId === this[key__] ) return getPairedId(this);
         } catch (e) {
           return getPairedId(this);
         }
