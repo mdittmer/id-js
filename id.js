@@ -77,7 +77,16 @@ module.exports = function(opts) {
           return getPairedId(this);
         }
       }
-      return this[key__];
+      // Get paired Id if own property of this[key__] was not created.
+      // For example: sessionStorage and localStorage are some
+      // special obejcts shared among pages. The +UID will be stored
+      // in the storage object if the browser or page is not closed.
+      // This results to error in manual object graph collection.
+      if (this.__proto__ && this.__proto__[key] === this[key__]) {
+        return getPairedId(this);
+      } else {
+        return this[key__];
+      }
     },
     enumerable: false,
   };
